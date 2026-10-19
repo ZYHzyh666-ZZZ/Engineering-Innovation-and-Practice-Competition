@@ -1,0 +1,20 @@
+{
+  "workbench.colorCustomizations": {
+    "gitDecoration.modifiedResourceForeground": "#F1FA8C",
+    "gitDecoration.untrackedResourceForeground": "#50FA7B",
+    "gitDecoration.deletedResourceForeground": "#FF5555",
+    "gitDecoration.conflictingResourceForeground": "#FF79C6",
+    "gitDecoration.ignoredResourceForeground": "#6272A4",
+    "gitDecoration.submoduleResourceForeground": "#8BE9FD"
+  },
+  "git-graph.branchLabelColours": [
+    "#ff6c6b",
+    "#98be65",
+    "#51afef",
+    "#c678dd",
+    "#46d9ff",
+    "#d19a66",
+    "#a9a1e1",
+    "#ffcb6b"
+  ]
+}
