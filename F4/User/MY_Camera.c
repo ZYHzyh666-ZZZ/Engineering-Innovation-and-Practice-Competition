@@ -14,79 +14,57 @@ u8 len = 0, count_data = 0;
 
 u8 camera_flag = 0;
 u8 camera_choose[2] = {0};
+u8 camera_goods = 0;
+u8 camera_person = 0;
+
+u8 onekey_flag = 0;
 
 void Camera_Data(void) //处理接收的数据              
 {	
 	switch(camera_data[0])
 	{
-		case 0x0A:
+		case 0x0A:                  //第一个障碍物识别
 		{
             camera_choose[0] = camera_data[1];
-			// width[0] = camera_data[1]*100 + camera_data[2]*10 + camera_data[3];
-			// location[0] = camera_data[4]*100 + camera_data[5]*10 + camera_data[6];
-            // width[0] = Width_0_baseline - width[0];
-            // location[0] = Location_0_baseline - location[0];
 
-			// rx_flag[0] = 1;
-            // camera_flag[0] = 1;
 			break;
 		}
-		case 0x0B:
+		case 0x0B:                  //危险物识别
 		{
-			// width[1] = camera_data[1]*100 + camera_data[2]*10 + camera_data[3];
-			// location[1] = camera_data[4]*100 + camera_data[5]*10 + camera_data[6];
-            // width[1] = Width_1_baseline - width[1];
-            // location[1] = Location_1_baseline - location[1];
+			camera_goods = camera_data[1];
 
-			// rx_flag[1] = 1;
-            // camera_flag[1] = 1;
 			break;
 		}
-		case 0x0C:
+		case 0x0C:                  //第二个障碍物识别
+        {
+            camera_choose[1] = camera_data[1];
+
+            break;
+        }
+        case 0x0D:                  //人物识别
+        {
+            camera_person = camera_data[1];
+
+            break;
+        }
+        case 0x0F:                  //起飞指令
 		{
+            if(camera_data[1] == 0x01)
+                if(onekey_flag == 0)
+                {
+                    // if(rc_in.rc_ch.st_data.ch_[ch_7_aux3] > 1700 && rc_in.rc_ch.st_data.ch_[ch_5_aux1] < 1700)
+
+                    if(rc_in.rc_ch.st_data.ch_[ch_7_aux3] > 1700 && rc_in.rc_ch.st_data.ch_[ch_5_aux1] < 1700 && rc_in.rc_ch.st_data.ch_[ch_5_aux1] > 1200)
+                    {
+                        start_task2_flag = 1;
+                        FC_Unlock();
+                        onekey_flag = 1;							
+                    }
+                }
 			
 			break;
 		}
-        case 0x01:
-		{
-			// camera_flag = camera_data[1];
-            // camera_x = ((u16)camera_data[2] << 8) | camera_data[3];
-            // if(camera_flag == 0)
-            //     camera_x *= -1;
-
-			// camera_flag = camera_data[4];
-            // camera_y = ((u16)camera_data[5] << 8) | camera_data[6];
-
-            // ANO_DT_Send_MY_DATA(0xF6,2,camera_x,camera_y);
-
-			break;
-		}
 	}
-	
-	// if(rx_flag[0])
-	// {
-	// 	rx_flag[0] = 0;
-	// 	ANO_DT_Send_MY_DATA(0xF6,2,width[0],location[0]);
-
-	// }
-	// if(rx_flag[1])
-	// {
-	// 	rx_flag[1] = 0;
-	// 	ANO_DT_Send_MY_DATA(0xF7,2,width[1],location[1]);
-	// }
-
-    // if(PID1_flag)
-    // {
-    //     postion_target_z = (s16)MY_fly.C_system.z + PID1_updata(location[0]);
-    //     velocity_target_x = PID2_updata(width[0]);
-    // }
-    // if(PID2_flag)
-    // {
-    //     // postion_target_z = MY_fly.C_system.z + PID1_updata(location[0]);
-    //     velocity_target_y = PID3_updata(location[1]);
-    //     velocity_target_x = PID2_updata(width[1]);
-    // }
-	
 }
 
 /*接收Camera传过来的数据（转移寄存器）*/
@@ -97,7 +75,7 @@ void Camera_Receive_Data(uint8_t data)
 		// ANO_DT_Send_MY_DATA(0xF2,1,data);
 
 //    DrvUart2SendBuf(&data,1);
-    if (state == 0 && data == 0xEF)     //帧头1
+    if (state == 0 && data == _Camera_head)     //帧头1
     {
         state = 1;
     }
@@ -127,7 +105,7 @@ void Camera_Receive_Data(uint8_t data)
         else
             state = 0;
     }
-    else if (state == 4 && data == 0xFE)
+    else if (state == 4 && data == _Camera_head)
     {
         // MY_Camera_print("ok\n");
 

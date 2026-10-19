@@ -3,6 +3,12 @@
 
 #include "SysConfig.h"
 
+enum 
+{
+    _Camera_head = 0xEF,
+    _Camera_tail = 0xFE,
+};
+
 // extern u8 camera_flag[2];
 
 // extern s16 width[2];

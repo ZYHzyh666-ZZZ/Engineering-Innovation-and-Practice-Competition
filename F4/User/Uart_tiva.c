@@ -21,7 +21,7 @@ s32 LX_to_N100(s32 X)
 }
 
 u8 page, type, num;
-u8 onekey_flag = 0;
+// u8 onekey_flag = 0;
 
 void Tiva_Data(void) //处理接收的数据              
 {	
@@ -75,17 +75,17 @@ void Tiva_Data(void) //处理接收的数据
 			{
 				case 1:
 				{
-					if(onekey_flag == 0)
-					{
-						// if(rc_in.rc_ch.st_data.ch_[ch_7_aux3] > 1700 && rc_in.rc_ch.st_data.ch_[ch_5_aux1] < 1700)
+					// if(onekey_flag == 0)
+					// {
+					// 	// if(rc_in.rc_ch.st_data.ch_[ch_7_aux3] > 1700 && rc_in.rc_ch.st_data.ch_[ch_5_aux1] < 1700)
 
-						if(rc_in.rc_ch.st_data.ch_[ch_7_aux3] > 1700 && rc_in.rc_ch.st_data.ch_[ch_5_aux1] < 1700 && rc_in.rc_ch.st_data.ch_[ch_5_aux1] > 1200)
-						{
-							start_task2_flag = 1;
-							FC_Unlock();
-							onekey_flag = 1;							
-						}
-					}
+					// 	// if(rc_in.rc_ch.st_data.ch_[ch_7_aux3] > 1700 && rc_in.rc_ch.st_data.ch_[ch_5_aux1] < 1700 && rc_in.rc_ch.st_data.ch_[ch_5_aux1] > 1200)
+					// 	// {
+					// 	// 	start_task2_flag = 1;
+					// 	// 	FC_Unlock();
+					// 	// 	onekey_flag = 1;							
+					// 	// }
+					// }
 					break;
 				}
 				case 2:
