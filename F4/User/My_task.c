@@ -58,9 +58,7 @@ u32 times;
 double Work_time = 0;
 
 u16 User_times_count; 
-s16 postion_target_x, velocity_target_x; 
-s16 postion_target_y, velocity_target_y;
-s16 postion_target_z;
+
 /*---------------------------------*/
 
 //空闲任务钩子函数
@@ -427,7 +425,7 @@ void user_200Hz(TimerHandle_t xTimer)
                                     ano_of.of1_dy,
                                     ano_of.of_alt_cm,
                                     (int)Radar.Location_Z - ano_of.of_alt_cm + 7,
-                                    postion_target_z
+                                    position_target_z
                             );	    
     }
 

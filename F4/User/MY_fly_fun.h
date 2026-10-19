@@ -25,7 +25,7 @@ void mode_Hold_Yaw(s16 exp_yaw);							//航向角控制
 
 void Oblique_flight(int yaw, int v);
 
-void control_to_B(void);
+void control_to_move(enum __location_enum P_X, enum __location_enum P_Y);
 void control_to_follow(void);
 void control_back(void);
 

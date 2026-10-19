@@ -184,23 +184,23 @@ void Oblique_line(s16 down_angle_100, s16 x_target, s16 y_target, s16 v)
 
 
 /**
-  * 函数作用：  向B移动
-  * 参数：      无
+  * 函数作用：  向目标点移动
+  * 参数：      enum __location_enum P_X, enum  __location_enum P_Y 目标点坐标
   * 返回值：    无
   * 
   * 备注：      无
   * 更新日期：   2026-7-30
   */
-void control_to_B(void)
+void control_to_move(enum __location_enum P_X, enum __location_enum P_Y)
 {
   int V_x,  V_y;
-  V_x = _PID_Traditional_computing(PID_to_move, _B_X - Radar.Location_X);
-	V_y = _PID_Traditional_computing(PID_to_move, _B_Y - Radar.Location_Y);
+  V_x = _PID_Traditional_computing(PID_to_move, P_X - Radar.Location_X);
+	V_y = _PID_Traditional_computing(PID_to_move, P_Y - Radar.Location_Y);
 	
 
-    ANO_DT_Send_MY_DATA(0xF1,2, V_x,
-                                V_y
-                        );	   
+    // ANO_DT_Send_MY_DATA(0xF1,2, V_x,
+    //                             V_y
+    //                     );	   
   Program_Ctrl_User_Set_HXYcmps(V_x,V_y);
   return;
 }
@@ -250,6 +250,8 @@ void control_back(void)
   Program_Ctrl_User_Set_HXYcmps(V_x,V_y);
   return;
 }
+
+
 
 #if 0
 

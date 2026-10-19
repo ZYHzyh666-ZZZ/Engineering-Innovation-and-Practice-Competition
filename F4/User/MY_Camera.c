@@ -12,8 +12,8 @@
 char camera_data[20] = {0};
 u8 len = 0, count_data = 0;
 
-
 u8 camera_flag = 0;
+u8 camera_choose[2] = {0};
 
 void Camera_Data(void) //处理接收的数据              
 {	
@@ -21,6 +21,7 @@ void Camera_Data(void) //处理接收的数据
 	{
 		case 0x0A:
 		{
+            camera_choose[0] = camera_data[1];
 			// width[0] = camera_data[1]*100 + camera_data[2]*10 + camera_data[3];
 			// location[0] = camera_data[4]*100 + camera_data[5]*10 + camera_data[6];
             // width[0] = Width_0_baseline - width[0];
