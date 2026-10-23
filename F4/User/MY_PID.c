@@ -375,9 +375,9 @@ void MY_PID_Init(void)
     _PID_Init(&PID_YAW, 0.008f, 0.0f, 0.001f, 22.0f, -22.0f);
 	
   /*PID参数初始化*/
-    _PID_Init(&PID_1, 0.04f, 0.0f, 0.01f, 20.0f, -20.0f);      //X环
-    _PID_Init(&PID_2, 0.04f, 0.0f, 0.01f, 20.0f, -20.0f);      //Y环
-    _PID_Init(&PID_3, 0.011f, 0.0f, 0.001f, 18.0f, -18.0f);    //锁定
+    // _PID_Init(&PID_1, 0.04f, 0.0f, 0.01f, 20.0f, -20.0f);      //X环
+    // _PID_Init(&PID_2, 0.04f, 0.0f, 0.01f, 20.0f, -20.0f);      //Y环
+    // _PID_Init(&PID_3, 0.011f, 0.0f, 0.001f, 18.0f, -18.0f);    //锁定
 
     /*跟随投放*/
     _PID_Init(&PID_follow,0.12f,0.0f,0.01f,20.0f,-20.0f);

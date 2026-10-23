@@ -13,57 +13,61 @@ char camera_data[20] = {0};
 u8 len = 0, count_data = 0;
 
 u8 camera_flag = 0;
-u8 camera_choose[2] = {0};
-u8 camera_goods = 0;
-u8 camera_person = 0;
+// u8 camera_choose[2] = {0};
+// u8 camera_goods = 0;
+// u8 camera_person = 0;
 
-u8 onekey_flag = 0;
+// u8 onekey_flag = 0;
 
 void Camera_Data(void) //处理接收的数据              
 {	
+    		// MY_BEEP_ON(300);
+
 	switch(camera_data[0])
 	{
-		case 0x0A:                  //第一个障碍物识别
-		{
-            camera_choose[0] = camera_data[1];
+	// 	case 0x0A:                  //第一个障碍物识别
+	// 	{
+    //         camera_choose[0] = camera_data[1];
 
-			break;
-		}
-		case 0x0B:                  //危险物识别
-		{
-			camera_goods = camera_data[1];
+	// 		break;
+	// 	}
+	// 	case 0x0B:                  //危险物识别
+	// 	{
+	// 		camera_goods = camera_data[1];
 
-			break;
-		}
-		case 0x0C:                  //第二个障碍物识别
-        {
-            camera_choose[1] = camera_data[1];
+	// 		break;
+	// 	}
+	// 	case 0x0C:                  //第二个障碍物识别
+    //     {
+    //         camera_choose[1] = camera_data[1];
 
-            break;
-        }
-        case 0x0D:                  //人物识别
-        {
-            camera_person = camera_data[1];
+    //         break;
+    //     }
+    //     case 0x0D:                  //人物识别
+    //     {
+    //         camera_person = camera_data[1];
 
-            break;
-        }
-        case 0x0F:                  //起飞指令
-		{
-            if(camera_data[1] == 0x01)
-                if(onekey_flag == 0)
-                {
-                    // if(rc_in.rc_ch.st_data.ch_[ch_7_aux3] > 1700 && rc_in.rc_ch.st_data.ch_[ch_5_aux1] < 1700)
+    //         break;
+    //     }
+    //     case 0x0F:                  //起飞指令
+	// 	{
+    //         // if(camera_data[1] == 0x01)
+    //             if(onekey_flag == 0)
+    //             {
+    //                 // if(rc_in.rc_ch.st_data.ch_[ch_7_aux3] > 1700 && rc_in.rc_ch.st_data.ch_[ch_5_aux1] < 1700)
 
-                    if(rc_in.rc_ch.st_data.ch_[ch_7_aux3] > 1700 && rc_in.rc_ch.st_data.ch_[ch_5_aux1] < 1700 && rc_in.rc_ch.st_data.ch_[ch_5_aux1] > 1200)
-                    {
-                        start_task2_flag = 1;
-                        FC_Unlock();
-                        onekey_flag = 1;							
-                    }
-                }
+    //                 // if(rc_in.rc_ch.st_data.ch_[ch_7_aux3] > 1700 && rc_in.rc_ch.st_data.ch_[ch_5_aux1] < 1700 && rc_in.rc_ch.st_data.ch_[ch_5_aux1] > 1200)
+    //                 // {
+    //                 //     start_task1_flag = 1;
+    //                 //     FC_Unlock();
+    //                 //     onekey_flag = 1;							
+    //                 // }
+    //                 		ANO_DT_SendString(2,"Start!");
+
+    //             }
 			
-			break;
-		}
+	// 		break;
+	// 	}
 	}
 }
 

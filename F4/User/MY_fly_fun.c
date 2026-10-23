@@ -198,9 +198,9 @@ void control_to_move(enum __location_enum P_X, enum __location_enum P_Y)
 	V_y = _PID_Traditional_computing(PID_to_move, P_Y - Radar.Location_Y);
 	
 
-    // ANO_DT_Send_MY_DATA(0xF1,2, V_x,
-    //                             V_y
-    //                     );	   
+    ANO_DT_Send_MY_DATA(0xF1,2, V_x,
+                                V_y
+                        );	   
   Program_Ctrl_User_Set_HXYcmps(V_x,V_y);
   return;
 }
@@ -217,8 +217,8 @@ void control_to_move(enum __location_enum P_X, enum __location_enum P_Y)
 void control_to_follow(void)
 {
   int V_x,  V_y;
-  V_x = _PID_Traditional_and_Dead_Zone(PID_follow, Camera.x - _Camera_middle_X, 2);
-	V_y = _PID_Traditional_and_Dead_Zone(PID_follow, Camera.y - _Camera_middle_Y, 2);
+  // V_x = _PID_Traditional_and_Dead_Zone(PID_follow, Camera.x - _Camera_middle_X, 2);
+	// V_y = _PID_Traditional_and_Dead_Zone(PID_follow, Camera.y - _Camera_middle_Y, 2);
 
 
     ANO_DT_Send_MY_DATA(0xF1,2, V_x,

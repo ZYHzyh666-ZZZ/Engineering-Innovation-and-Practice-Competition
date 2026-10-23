@@ -62,61 +62,53 @@ void mission_2_7(void);
 void mission_2_8(void);
 
 
-#define Default_height 140			//默认高度cm
+#define Default_height 110			//默认高度cm
 
-enum __location_enum		//地图右X正，下Y正
+enum __location_enum		//地图右X正，上Y正
 {
-	_HOME_X = 650,
-	_HOME_Y = 650,
+	_HOME_X = 165,
+	_HOME_Y = 65,
 
-	// _B_X    = 350,
-	// _B_Y    = 250,
+	_P1_Waiting_X	= 335,
+	_P1_Waiting_Y	= 65,			//随机障碍1扫描点
 
-	// _C_X    = 350,
-	// _C_Y    = 100,
+	_P1_choose_1_X	= 335,
+	_P1_choose_1_Y	= 65,			//随机障碍1选择点1
 
-	_P1_Waiting_X	= 650,			//随机障碍1扫描点
-	_P1_Waiting_Y	= 2500,
+	_P1_choose_2_X	= 385,
+	_P1_choose_2_Y	= 65,			//随机障碍1选择点2
 
-	_P1_choose_1_X	= 650,			//随机障碍1选择点1
-	_P1_choose_1_Y	= 2350,
+	_P1_back_Y	= 65,				//随机障碍1返回点
+	_P1_move_Y	= 205,				//随机障碍1移动目标点
 
-	_P1_choose_2_X	= 650,			//随机障碍1选择点2
-	_P1_choose_2_Y	= 2850,
+	_P_goods_1_X	= 165,
+	_P_goods_1_Y	= 205,			//危险品任务点1
 
-	_P1_move_X	= 2050,				//随机障碍1移动目标点
-	_P1_back_X	= 650,				//随机障碍1返回点
-
-	_P_goods_1_X	= 2050,			//危险品任务点1
-	_P_goods_1_Y	= 650,
-
-	_P_goods_2_X	= 2050,			//危险品任务点2
-	_P_goods_2_Y	= 1150,
+	_P_goods_2_X	= 215,
+	_P_goods_2_Y	= 205,			//危险品任务点2
 
 /*----------------------------------------------------------------*/
 
-	_P2_Waiting_X	= 2050,			//随机障碍2扫描点
-	_P2_Waiting_Y	= 2500,
+	_P2_Waiting_X	= 274,
+	_P2_Waiting_Y	= 205,			//随机障碍2扫描点
 
-	_P2_choose_1_X	= 2050,			//随机障碍2选择点1
-	_P2_choose_1_Y	= 2350,
+	_P2_choose_1_X	= 335,
+	_P2_choose_1_Y	= 205,			//随机障碍2选择点1
 
-	_P2_choose_2_X	= 2050,			//随机障碍2选择点2
-	_P2_choose_2_Y	= 2850,
+	_P2_choose_2_X	= 375,
+	_P2_choose_2_Y	= 205,			//随机障碍2选择点2
 
-	_P2_move_X	= 3350,				//随机障碍2移动目标点
-	_P2_back_X	= 2050,				//随机障碍2返回点
+	_P2_back_Y	= 205,				//随机障碍2返回点
+	_P2_move_Y	= 335,				//随机障碍2移动目标点
 
-	_P_person_1_X	= 3350,			//人物任务点1
-	_P_person_1_Y	= 2100,
+	_P_person_1_X	= 265,
+	_P_person_1_Y	= 335,			//人物任务点1
 
-	_P_person_2_X	= 3350,			//人物任务点2
-	_P_person_2_Y	= 2700,
+	_P_person_2_X	= 350,
+	_P_person_2_Y	= 335,			//人物任务点2
 
-	_P_person_3_X	= 3350,			//人物任务点3
-	_P_person_3_Y	= 3300,
-	// _P3_X	= 111,
-	// _P3_Y	= 400,
+	_P_person_3_X	= 430,
+	_P_person_3_Y	= 335,			//人物任务点3
 };
 
 extern u8 PID1_flag;

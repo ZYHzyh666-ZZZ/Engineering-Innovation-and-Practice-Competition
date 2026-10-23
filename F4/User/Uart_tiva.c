@@ -7,6 +7,7 @@ __Car_stu	Car = {0};
 u8 Tiva_data_in[100] = {0};
 
 u8 N100_one_data = 0;
+u8 onekey_flag = 0;
 
 #define num(X) ((X==' ')?(0):(X-'0'))
 
@@ -48,17 +49,61 @@ void Tiva_Data(void) //处理接收的数据
 		//	N100.Yaw_100 = N100.Yaw_100 > 18000?N100.Yaw_100 % 18000:N100.Yaw;
 			N100.Pitch_100 = -N100.Pitch_100;
 			
-			// ANO_DT_Send_MY_DATA(0xF3,1,N100.Yaw_100);
+			ANO_DT_Send_MY_DATA(0xF3,1,N100.Yaw_100);
 			break;
 		}
-		case 0x04:
+		case 0x02:
 		{
-			// MY_BEEP_ON(50); 660  370  640  360
-						// MY_HMI_print("*P0N01%d!",num);
-			Camera.y = num(Tiva_data_in[1])*100 + num(Tiva_data_in[2])*10 + num(Tiva_data_in[3])*1;
-			Camera.x = num(Tiva_data_in[4])*100 + num(Tiva_data_in[5])*10 + num(Tiva_data_in[6])*1;
+			// MY_BEEP_ON(50); 
+			// ANO_DT_SendString(2,"Rx!");
 
-			ANO_DT_Send_MY_DATA(0xF6,2,Camera.x,Camera.y);
+			switch(Tiva_data_in[1])
+			{
+				case 0x0A:                  //第一个障碍物识别
+				{
+					Camera.camera_choose[0] = Tiva_data_in[2];
+
+					break;
+				}
+				case 0x0B:                  //危险物识别
+				{
+					Camera.camera_goods = Tiva_data_in[2];
+
+					break;
+				}
+				case 0x0C:                  //第二个障碍物识别
+				{
+					Camera.camera_choose[1] = Tiva_data_in[2];
+
+					break;
+				}
+				case 0x0D:                  //人物识别
+				{
+					Camera.camera_person = Tiva_data_in[2];
+
+					break;
+				}
+				case 0x0F:                  //起飞指令
+				{
+					// if(camera_data[1] == 0x01)
+						if(onekey_flag == 0)
+						{
+							// if(rc_in.rc_ch.st_data.ch_[ch_7_aux3] > 1700 && rc_in.rc_ch.st_data.ch_[ch_5_aux1] < 1700)
+
+							if(rc_in.rc_ch.st_data.ch_[ch_7_aux3] > 1700 && rc_in.rc_ch.st_data.ch_[ch_5_aux1] < 1700 && rc_in.rc_ch.st_data.ch_[ch_5_aux1] > 1200)
+							{
+								ANO_DT_SendString(2,"Start!");
+							    start_task1_flag = 1;
+							    FC_Unlock();
+							    onekey_flag = 1;							
+							}
+							// ANO_DT_SendString(2,"Start!");
+
+						}
+					
+					break;
+				}
+			}
 			break;
 		}
 		case 0x05:

@@ -95,13 +95,9 @@ void Radar_Updata(void)
                                     (int)(Radar.Velocity_Z)
                             );
 
-        // fly_velocity_updata();
-        // Printf_uart2("%f/%f/%f\n",Radar.Location_X*100,Radar.Location_Y*100,Radar.Location_Z*100);
-
     }
     else if(buf[0] == 0x0B)
     {
-        // ANO_DT_Send_MY_DATA(0xF7,3,(int)(Radar.Velocity_X),(int)(Radar.Velocity_Y),(int)(Radar.Velocity_Z));
     }
 }
 

@@ -10,7 +10,7 @@
   */
 u8 Judgment_Position(s16 Position_X, s16 Position_Y)
 {
-    if((ABS(Radar.Location_X - Position_X) < 10) && (ABS(Radar.Location_Y - Position_Y) < 10))
+    if((ABS(Radar.Location_X - Position_X) < 20) && (ABS(Radar.Location_Y - Position_Y) < 20))
     {
         return 1;
     }

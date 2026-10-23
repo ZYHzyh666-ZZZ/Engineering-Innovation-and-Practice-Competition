@@ -11,64 +11,109 @@ s16 location = 0;
 s16 width = 0;
 s16 number = 0;
 
+s16 camera_x, camera_y;
+
 u8 cemera_data_get[20] = {0};
 u8 sum_data = 0;
 
 u8 camera_flag;
-s16 camera_x, camera_y;
+u8 camera_choose;
 
 void Cemera_DataAnl(u8* data, int data_len)
 {
-	switch(*data)
-	{
-		case 0x0A:
-		{
-//			width = *(data+1)*100 + *(data+2)*10 + *(data+3);
-//			location = *(data+4)*100 + *(data+5)*10 + *(data+6);
-			
-//			ANO_Send_Data(0xF2,3,(int)width,(int)location,0x01);
-		}
-		case 0x0B:
-		{
+	// switch(*data)
+	// {
+	// 	case 0x0A:                  //第一个障碍物识别
+	// 	{
+    //         camera_choose[0] = camera_data[1];
 
-		}
-		case 0x0C:
-		{
-			location = *(data+1) << 8 | *(data+2);
-			width = *(data+3) << 8 | *(data+4);
-			number = *(data+6);
-			if(number == 0xFF)
-				number = 0;
-		}
-		case 0x0D:
-		{
-			
-		}
-		case 0x01:
-		{
-			// camera_flag = *(data+1);
-            camera_x = ((u16)*(data+1) << 8) | *(data+2);
-            // if(camera_flag == 0)
-            //     camera_x *= -1;
+	// 		break;
+	// 	}
+	// 	case 0x0B:                  //危险物识别
+	// 	{
+	// 		camera_goods = camera_data[1];
 
-			// camera_flag = *(data+4);
-            camera_y = ((u16)*(data+3) << 8) | *(data+4);
-            // if(camera_flag == 0)
-            //     camera_y *= -1;
+	// 		break;
+	// 	}
+	// 	case 0x0C:                  //第二个障碍物识别
+    //     {
+    //         camera_choose[1] = camera_data[1];
 
-		}
-	}
-	if(*data == 0x01)
-	{
-		ANO_Send_Data(0xF4,3,camera_x,camera_y,number,0x01);
-		print_F4("@%c%c%3d%3d*",0x07,0x04,camera_x,camera_y);
-	}
+    //         break;
+    //     }
+    //     case 0x0D:                  //人物识别
+    //     {
+    //         camera_person = camera_data[1];
+
+    //         break;
+    //     }
+    //     case 0x0F:                  //起飞指令
+	// 	{
+	// 		break;
+	// 	}
+	// }
+	// if(*data == 0x01)
+	// {
+	// 	ANO_Send_Data(0xF4,3,camera_x,camera_y,number,0x01);
+	// 	print_F4("@%c%c%3d%3d*",0x07,0x04,camera_x,camera_y);
+	// }
 	
-	if(*data == 0x0C)
-	{
-		ANO_Send_Data(0xF2,4,location,width,number,0x01);
-		print_F4("@%c%c%3d%3d%1d*",0x08,0x02,location,width,number);
-	}
+	// if(*data == 0x0C)
+	// {
+	// 	ANO_Send_Data(0xF2,4,location,width,number,0x01);
+	// 	print_F4("@%c%c%3d%3d%1d*",0x08,0x02,location,width,number);
+	// }
+//	DrvUart6SendBuf(data,1);
+	
+	switch(*data)
+	 {
+	 	case 0x0A:                  //第一个障碍物识别
+	 	{
+			if(*(data+1) == 0x01)
+				print_F4("@%c%c%c%c*",0x03,0x02,0x0A,0x01);
+			else
+				print_F4("@%c%c%c%c*",0x03,0x02,0x0A,0x02);
+			
+	 		break;
+	 	}
+	 	case 0x0B:                  //危险物识别
+	 	{
+			if(*(data+1) == 0x01)
+				print_F4("@%c%c%c%c*",0x03,0x02,0x0B,0x01);
+			else
+				print_F4("@%c%c%c%c*",0x03,0x02,0x0B,0x02);
+			
+	 		break;
+	 	}
+	 	case 0x0C:                  //第二个障碍物识别
+         {
+			if(*(data+1) == 0x01)
+				print_F4("@%c%c%c%c*",0x03,0x02,0x0C,0x01);
+			else
+				print_F4("@%c%c%c%c*",0x03,0x02,0x0C,0x02);
+             break;
+         }
+         case 0x0D:                  //人物识别
+         {
+			if(*(data+1) == 0x01)
+				print_F4("@%c%c%c%c*",0x03,0x02,0x0D,0x01);
+			else if(*(data+1) == 0x02)
+				print_F4("@%c%c%c%c*",0x03,0x02,0x0D,0x02);
+			else
+				print_F4("@%c%c%c%c*",0x03,0x02,0x0D,0x03);
+
+             break;
+         }
+         case 0x0F:                  //起飞指令
+	 	{
+			print_F4("@%c%c%c%c*",0x03,0x02,0x0F,0x01);
+
+	 		break;
+	 	}
+	 }
+	camera_flag = *data;
+	camera_choose = *(data+1);
+//	print_F4("@%c%c%c%c*",0x03,0x02,*data,*(data+1));
 }
 
 void Cemera_get_onebyte(u8 data)

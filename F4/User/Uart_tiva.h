@@ -14,8 +14,9 @@ typedef struct
 
 typedef struct 
 {
-	s16 x;
-	s16 y;
+    u8 camera_choose[2];
+    u8 camera_goods;
+    u8 camera_person;
 }__Camera_stu;
 
 typedef struct 

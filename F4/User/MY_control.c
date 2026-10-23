@@ -20,11 +20,10 @@ My_mission_task task_mission_1[]=
 	{mission_1_7,2.0f},			//移动过障碍1
 	{mission_1_8,2.0f},			//移动人员起点
 	{mission_1_9,2.0f},			//移动人员工作
-	{mission_1_10,3.0f},		//返回障碍2
+	{mission_1_10,2.0f},		//返回障碍2
 	{mission_1_11,2.0f},		//返回障碍1
 	{mission_1_12,2.0f},		//移动回家
 	{mission_1_13,2.0f},		//降落
-
 };
 My_task_state task_1;
 u8 start_task1_flag = 0;		//任务开始标志
@@ -192,7 +191,7 @@ void mission_1_2(void)				//移动 + 扫描随机路径
 
 	control_to_move(_P1_Waiting_X, _P1_Waiting_Y);
 
-	if(camera_choose[0] && Judgment_Position(_P1_Waiting_X, _P1_Waiting_Y))
+	if(Camera.camera_choose[0] && Judgment_Position(_P1_Waiting_X, _P1_Waiting_Y))
 		work_flag = 1;								//判断是否扫描到路径 && 到达等待位置
 
 	if(_time_ok(task_1) && work_flag)								
@@ -203,6 +202,11 @@ void mission_1_2(void)				//移动 + 扫描随机路径
 		takeoff_once = 0;
 		ANO_DT_SendString(2,"scan OK!");
 
+		if(Camera.camera_choose[0] == 1)
+			ANO_DT_SendString(1,"scan -- 1!");
+		else
+			ANO_DT_SendString(1,"scan -- 2!");
+		
 		return;
 	}
 }
@@ -222,13 +226,13 @@ void mission_1_3(void)						//移动过障碍1
 	{
 		case 0:	//移动至路径前
 		{
-			if(camera_choose[0] == 1)
+			if(Camera.camera_choose[0] == 1)
 			{
 				control_to_move(_P1_choose_1_X, _P1_choose_1_Y);
 				if(Judgment_Position(_P1_choose_1_X, _P1_choose_1_Y))
 					work_flag = 1;
 			}
-			else if(camera_choose[0] == 2)
+			else if(Camera.camera_choose[0] == 2)
 			{
 				control_to_move(_P1_choose_2_X, _P1_choose_2_Y);
 				if(Judgment_Position(_P1_choose_2_X, _P1_choose_2_Y))
@@ -237,16 +241,16 @@ void mission_1_3(void)						//移动过障碍1
 		}
 		case 1:	//移动通过障碍1
 		{
-			if(camera_choose[0] == 1)
+			if(Camera.camera_choose[0] == 1)
 			{
-				control_to_move(_P1_move_X, _P1_choose_1_Y);
-				if(Judgment_Position(_P1_move_X, _P1_choose_1_Y))
+				control_to_move(_P1_choose_1_X, _P1_move_Y);
+				if(Judgment_Position(_P1_choose_1_X, _P1_move_Y))
 					work_flag = 2;
 			}
-			else if(camera_choose[0] == 2)
+			else if(Camera.camera_choose[0] == 2)
 			{
-				control_to_move(_P1_move_X, _P1_choose_2_Y);
-				if(Judgment_Position(_P1_move_X, _P1_choose_2_Y))
+				control_to_move(_P1_choose_2_X, _P1_move_Y);
+				if(Judgment_Position(_P1_choose_2_X, _P1_move_Y))
 					work_flag = 2;
 			}
 		}
@@ -273,9 +277,9 @@ void mission_1_4(void)						//移动危险任务区
 
 	Set_High(position_target_z);
 	mode_Hold_Yaw(Yaw_target);				
-	control_to_move(_P_goods_1_X, _P_goods_1_Y);
+	control_to_move(_P_goods_2_X, _P_goods_2_Y);
 
-	if(Judgment_Position(_P_goods_1_X, _P_goods_1_Y))
+	if(Judgment_Position(_P_goods_2_X, _P_goods_2_Y))
 	{
 		work_flag = 1;
 	}
@@ -300,9 +304,9 @@ void mission_1_5(void)							//移动危险任务工作
 
 	Set_High(position_target_z);
 	mode_Hold_Yaw(Yaw_target);				
-	control_to_move(_P_goods_2_X, _P_goods_2_Y);
+	control_to_move(_P_goods_1_X, _P_goods_1_Y);
 
-	if(Judgment_Position(_P_goods_2_X, _P_goods_2_Y))
+	if(Judgment_Position(_P_goods_1_X, _P_goods_1_Y))
 	{
 		work_flag = 1;
 	}
@@ -330,7 +334,7 @@ void mission_1_6(void)							//移动 + 扫描随机路径
 
 	control_to_move(_P2_Waiting_X, _P2_Waiting_Y);
 
-	if(camera_choose[1] && Judgment_Position(_P2_Waiting_X, _P2_Waiting_Y))
+	if(Camera.camera_choose[1] && Judgment_Position(_P2_Waiting_X, _P2_Waiting_Y))
 		work_flag = 1;								//判断是否扫描到路径 && 到达等待位置
 
 	if(_time_ok(task_1) && work_flag)								
@@ -340,6 +344,11 @@ void mission_1_6(void)							//移动 + 扫描随机路径
 		task_1.finish = 1;
 		takeoff_once = 0;
 		ANO_DT_SendString(2,"scan OK!");
+
+		if(Camera.camera_choose[1] == 1)
+			ANO_DT_SendString(1,"scan -- 1!");
+		else
+			ANO_DT_SendString(1,"scan -- 2!");
 
 		return;
 	}
@@ -361,13 +370,13 @@ void mission_1_7(void)								//移动过障碍2
 	{
 		case 0:	//移动至路径前
 		{
-			if(camera_choose[1] == 1)
+			if(Camera.camera_choose[1] == 1)
 			{
 				control_to_move(_P2_choose_1_X, _P2_choose_1_Y);
 				if(Judgment_Position(_P2_choose_1_X, _P2_choose_1_Y))
 					work_flag = 1;
 			}
-			else if(camera_choose[1] == 2)
+			else if(Camera.camera_choose[1] == 2)
 			{
 				control_to_move(_P2_choose_2_X, _P2_choose_2_Y);
 				if(Judgment_Position(_P2_choose_2_X, _P2_choose_2_Y))
@@ -376,16 +385,16 @@ void mission_1_7(void)								//移动过障碍2
 		}
 		case 1:	//移动通过障碍2
 		{
-			if(camera_choose[1] == 1)
+			if(Camera.camera_choose[1] == 1)
 			{
-				control_to_move(_P2_move_X, _P2_choose_1_Y);
-				if(Judgment_Position(_P2_move_X, _P2_choose_1_Y))
+				control_to_move(_P2_choose_1_X, _P2_move_Y);
+				if(Judgment_Position(_P2_choose_1_X, _P2_move_Y))
 					work_flag = 2;
 			}
-			else if(camera_choose[1] == 2)
+			else if(Camera.camera_choose[1] == 2)
 			{
-				control_to_move(_P2_move_X, _P2_choose_2_Y);
-				if(Judgment_Position(_P2_move_X, _P2_choose_2_Y))
+				control_to_move(_P2_choose_2_X, _P2_move_Y);
+				if(Judgment_Position(_P2_choose_2_X, _P2_move_Y))
 					work_flag = 2;
 			}
 		}
@@ -470,28 +479,28 @@ void mission_1_10(void)							//返回障碍2
 	{
 		case 0:	//移动至路径后
 		{
-			if(camera_choose[1] == 1)
+			if(Camera.camera_choose[1] == 1)
 			{
-				control_to_move(_P2_move_X, _P2_choose_1_Y);
-				if(Judgment_Position(_P2_move_X, _P2_choose_1_Y))
+				control_to_move(_P2_move_Y, _P2_choose_1_Y);
+				if(Judgment_Position(_P2_move_Y, _P2_choose_1_Y))
 					work_flag = 1;
 			}
-			else if(camera_choose[1] == 2)
+			else if(Camera.camera_choose[1] == 2)
 			{
-				control_to_move(_P2_move_X, _P2_choose_2_Y);
-				if(Judgment_Position(_P2_move_X, _P2_choose_2_Y))
+				control_to_move(_P2_move_Y, _P2_choose_2_Y);
+				if(Judgment_Position(_P2_move_Y, _P2_choose_2_Y))
 					work_flag = 1;
 			}
 		}
 		case 1:	//移动通过障碍2
 		{
-			if(camera_choose[1] == 1)
+			if(Camera.camera_choose[1] == 1)
 			{
 				control_to_move(_P2_choose_1_X, _P2_choose_1_Y);
 				if(Judgment_Position(_P2_choose_1_X, _P2_choose_1_Y))
 					work_flag = 2;
 			}
-			else if(camera_choose[1] == 2)
+			else if(Camera.camera_choose[1] == 2)
 			{
 				control_to_move(_P2_choose_2_X, _P2_choose_2_Y);
 				if(Judgment_Position(_P2_choose_2_X, _P2_choose_2_Y))
@@ -528,28 +537,28 @@ void mission_1_11(void)							//返回障碍1
 	{
 		case 0:	//移动至路径后
 		{
-			if(camera_choose[0] == 1)
+			if(Camera.camera_choose[0] == 1)
 			{
-				control_to_move(_P1_move_X, _P1_choose_1_Y);
-				if(Judgment_Position(_P1_move_X, _P1_choose_1_Y))
+				control_to_move(_P1_move_Y, _P1_choose_1_Y);
+				if(Judgment_Position(_P1_move_Y, _P1_choose_1_Y))
 					work_flag = 1;
 			}
-			else if(camera_choose[0] == 2)
+			else if(Camera.camera_choose[0] == 2)
 			{
-				control_to_move(_P1_move_X, _P1_choose_2_Y);
-				if(Judgment_Position(_P1_move_X, _P1_choose_2_Y))
+				control_to_move(_P1_move_Y, _P1_choose_2_Y);
+				if(Judgment_Position(_P1_move_Y, _P1_choose_2_Y))
 					work_flag = 1;
 			}
 		}
 		case 1:	//移动通过障碍2
 		{
-			if(camera_choose[0] == 1)
+			if(Camera.camera_choose[0] == 1)
 			{
 				control_to_move(_P1_choose_1_X, _P1_choose_1_Y);
 				if(Judgment_Position(_P1_choose_1_X, _P1_choose_1_Y))
 					work_flag = 2;
 			}
-			else if(camera_choose[0] == 2)
+			else if(Camera.camera_choose[0] == 2)
 			{
 				control_to_move(_P1_choose_2_X, _P1_choose_2_Y);
 				if(Judgment_Position(_P1_choose_2_X, _P1_choose_2_Y))
@@ -613,7 +622,7 @@ void mission_1_13(void)//降落
 	Program_Ctrl_User_Set_HXYcmps(0,0);
 	if(ano_of.of_alt_cm < 10 && _time_ok(task_1))
 	{
-		task_2.finish = 1;
+		task_1.finish = 1;
 		takeoff_once = 0;
 		FC_Lock();
 		ANO_DT_SendString(2,"land OK!");
@@ -721,14 +730,14 @@ void mission_2_4(void)//锁定
 
 	control_to_follow();
 
-	if(abs(_Camera_middle_X - Camera.x) < 40 && abs(_Camera_middle_Y - Camera.y) < 40 && _time_ok(task_2))
+	if(_time_ok(task_2))
 	{
 		Move_stop();
 		Release_fun();
 		task_2.finish = 1;
 		takeoff_once = 0;
 		ANO_DT_SendString(2,"release OK!");
-		ANO_DT_Send_MY_DATA(0xF9,2,Camera.x,Camera.y);
+		// ANO_DT_Send_MY_DATA(0xF9,2,Camera.x,Camera.y);
 
 		return;
 	}
