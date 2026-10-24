@@ -35,6 +35,7 @@ extern _PID_parameter   PID_back;
 int limit_pidout(float pid_k, float pidout, float max, float min);
 void _PID_Init(_PID_parameter* PID, float P, float I, float D, float out_max, float out_min);
 int _PID_Traditional_computing(_PID_parameter PID,float exp);//传统PID计算
+int _PID_Customization_computing(_PID_parameter PID,float exp);//定点PID计算
 
 
 /*--------------------------------------------------------------*/

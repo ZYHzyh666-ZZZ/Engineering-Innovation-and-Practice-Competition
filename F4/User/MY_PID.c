@@ -120,6 +120,54 @@ int _PID_Increment_computing(_PID_parameter PID,float exp)//增量式PID计算
 }
 
 /**
+  * 函数作用：  雷达定点PID计算
+  * 参数1：     （_PID_parameter）PID名称
+  * 参数2：     （float）exp目标误差
+
+  * 返回值：     (int）PID输出
+  * 
+  * 备注：      无
+  * 更新日期：   2026-10-24 重构传统PID，旨在解决定点慢死区大问题
+  * 
+  */
+int _PID_Customization_computing(_PID_parameter PID,float exp)//传统PID计算
+{
+    /*误差计算*/
+    PID.err_current = exp;
+
+    /*误差微分*/
+    PID.err_prev += PID.err_last;
+
+    // /*误差限幅*/
+    // if(ABS(PID.err_current) < 5) 
+    //     PID.out = 0;
+
+    /*积分限幅*/
+    if (PID.err_prev > 20.0f)
+      PID.err_prev = 0;
+    else if (PID.err_prev < -20.0f)
+      PID.err_prev = 0;
+
+      
+    /*PID计算*/
+    PID.out = PID.kp * PID.err_current
+              + PID.ki * PID.err_prev
+              + PID.kd * (PID.err_current - PID.err_last); 
+
+    PID.err_last = PID.err_current;
+
+    /*死区控制*/
+    if(abs(exp) > 40)
+      PID.out *= 3;   //三倍结果
+    else if(abs(exp) > 15)
+      PID.out *= 2;   //两倍结果
+    else if(abs(exp) <= 15)
+      PID.out *= 1;
+
+	return limit_pidout(1.0f,PID.out, PID.limit_max, PID.limit_min);
+}
+
+/**
   * 函数作用：  PID输出限幅
   * 参数1：     （float）增幅倍数
   * 参数2：     （float）PID输出值
@@ -154,7 +202,7 @@ int limit_pidout(float pid_k, float pidout, float max, float min)
   */
 int PID_calculate_user_high(float exp)//高度PID计算
 {
-    /*高度数据只取光流高度*/
+    /*高度数据取雷达高度*/
     PID_HIGH.err_current = exp - Radar.Location_Z;
 
     /*计算PID*/
@@ -386,6 +434,13 @@ void MY_PID_Init(void)
     _PID_Init(&PID_back,0.2f,0.0f,0.02f,30.0f,-30.0f);
 
     /*寻找移动*/
-    _PID_Init(&PID_to_move,0.12f,0.0f,0.01f,27.0f,-27.0f);
+    _PID_Init(&PID_to_move,0.4f,0.0f,0.01f,40.0f,-40.0f);
+
+    /*P      I       D       Vmax       Vmin
+      0.2    0       0.01    27         -27     太慢，定点死区大
+      0.4    0       0.01    40         -40
+    
+    
+    */
 }
 

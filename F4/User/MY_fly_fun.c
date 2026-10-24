@@ -190,16 +190,18 @@ void Oblique_line(s16 down_angle_100, s16 x_target, s16 y_target, s16 v)
   * 
   * 备注：      无
   * 更新日期：   2026-7-30
+  *             2026-10-24 取消使用传统PID计算函数，改用专用定点PID计算函数
   */
 void control_to_move(enum __location_enum P_X, enum __location_enum P_Y)
 {
   int V_x,  V_y;
-  V_x = _PID_Traditional_computing(PID_to_move, P_X - Radar.Location_X);
-	V_y = _PID_Traditional_computing(PID_to_move, P_Y - Radar.Location_Y);
-	
+  V_x = _PID_Customization_computing(PID_to_move, P_X - Radar.Location_X);
+	V_y = _PID_Customization_computing(PID_to_move, P_Y - Radar.Location_Y);
 
-    ANO_DT_Send_MY_DATA(0xF1,2, V_x,
-                                V_y
+    ANO_DT_Send_MY_DATA(0xF1,4, V_x,
+                                V_y,
+                                P_X,
+                                P_Y
                         );	   
   Program_Ctrl_User_Set_HXYcmps(V_x,V_y);
   return;

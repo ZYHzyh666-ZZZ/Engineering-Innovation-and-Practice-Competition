@@ -49,8 +49,8 @@ void mission_1_10(void);
 void mission_1_11(void);
 void mission_1_12(void);
 void mission_1_13(void);
-void mission_1_14(void);
-void mission_1_15(void);
+// void mission_1_14(void);
+// void mission_1_15(void);
 
 void mission_2_1(void);
 void mission_2_2(void);
@@ -60,7 +60,11 @@ void mission_2_5(void);
 void mission_2_6(void);
 void mission_2_7(void);
 void mission_2_8(void);
-
+void mission_2_9(void);
+void mission_2_10(void);
+void mission_2_11(void);
+void mission_2_12(void);
+void mission_2_13(void);
 
 #define Default_height 110			//默认高度cm
 
@@ -72,7 +76,7 @@ enum __location_enum		//地图右X正，上Y正
 	_P1_Waiting_X	= 335,
 	_P1_Waiting_Y	= 65,			//随机障碍1扫描点
 
-	_P1_choose_1_X	= 335,
+	_P1_choose_1_X	= 320,
 	_P1_choose_1_Y	= 65,			//随机障碍1选择点1
 
 	_P1_choose_2_X	= 385,
@@ -92,10 +96,10 @@ enum __location_enum		//地图右X正，上Y正
 	_P2_Waiting_X	= 274,
 	_P2_Waiting_Y	= 205,			//随机障碍2扫描点
 
-	_P2_choose_1_X	= 335,
+	_P2_choose_1_X	= 305,
 	_P2_choose_1_Y	= 205,			//随机障碍2选择点1
 
-	_P2_choose_2_X	= 375,
+	_P2_choose_2_X	= 380,
 	_P2_choose_2_Y	= 205,			//随机障碍2选择点2
 
 	_P2_back_Y	= 205,				//随机障碍2返回点
@@ -107,7 +111,7 @@ enum __location_enum		//地图右X正，上Y正
 	_P_person_2_X	= 350,
 	_P_person_2_Y	= 335,			//人物任务点2
 
-	_P_person_3_X	= 430,
+	_P_person_3_X	= 440,
 	_P_person_3_Y	= 335,			//人物任务点3
 };
 
