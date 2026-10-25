@@ -38,6 +38,9 @@ void control_back(void);
 
 #define Release_fun()   (TIM3->CCR3 = 1100)
 #define Loading_fun()   (TIM3->CCR3 = 700)
+#define Loading_goods()     (TIM3->CCR3 = 900)
+#define Relseae_goods_1()   (TIM3->CCR3 = 700)
+#define Relseae_goods_2()   (TIM3->CCR3 = 1100)
 
 #if 0
 void reach_line(s16 line_exp_x, s16 line_exp_y, u8 x_stste, u8 y_state);    //巡线，参数为目标X轴误差，目标Y轴误差，X轴PID使能状态位，Y轴PID使能状态位

@@ -25,6 +25,7 @@ My_mission_task task_mission_1[]=
 	{mission_1_11,2.0f},		//返回障碍1
 	{mission_1_12,2.0f},		//移动回家
 	{mission_1_13,2.0f},		//降落
+	{mission_1_14,2.0f},		//降落
 };
 My_task_state task_1;
 u8 start_task1_flag = 0;		//任务开始标志
@@ -298,9 +299,9 @@ void mission_1_4(void)						//移动危险任务区
 
 	Set_High(position_target_z);
 	mode_Hold_Yaw(Yaw_target);				
-	control_to_move(_P_goods_2_X, _P_goods_2_Y);
+	control_to_move(_P_goods_1_X, _P_goods_1_Y);
 
-	if(Judgment_Position(_P_goods_2_X, _P_goods_2_Y))
+	if(Judgment_Position(_P_goods_1_X, _P_goods_1_Y) && Camera.camera_goods)
 	{
 		work_flag = 1;
 	}
@@ -323,26 +324,120 @@ void mission_1_5(void)							//移动危险任务工作
 		work_flag = 0;
 	}
 
+	mode_Hold_Yaw(Yaw_target);		
 	Set_High(position_target_z);
-	mode_Hold_Yaw(Yaw_target);				
-	control_to_move(_P_goods_1_X, _P_goods_1_Y);
 
-	if(Judgment_Position(_P_goods_1_X, _P_goods_1_Y))
+	switch(work_flag)
 	{
-		work_flag = 1;
-		Release_fun();
+		case 0:	//移动至目标点前
+		{
+			position_target_z = Default_height;
+			if(Camera.camera_goods == 1)
+			{
+				control_to_move(_P_goods_1_X, _P_goods_1_Y);
+				if(Judgment_Position(_P_goods_1_X, _P_goods_1_Y))
+					work_flag = 1;
+			}
+			else if(Camera.camera_goods == 2)
+			{
+				control_to_move(_P_goods_2_X, _P_goods_2_Y);
+				if(Judgment_Position(_P_goods_2_X, _P_goods_2_Y))
+					work_flag = 1;
+			}
+			break;
+		}
+		case 1:	//降高度
+		{
+			position_target_z = 40;
+			if(Camera.camera_goods == 1)
+			{
+				control_to_move(_P_goods_1_X, _P_goods_1_Y);
+				if(Judgment_Position(_P_goods_1_X, _P_goods_1_Y) && Radar.Location_Z < 43)
+					work_flag = 2;
+			}
+			else if(Camera.camera_goods == 2)
+			{
+				control_to_move(_P_goods_2_X, _P_goods_2_Y);
+				if(Judgment_Position(_P_goods_2_X, _P_goods_2_Y) && Radar.Location_Z < 43)
+					work_flag = 2;
+			}
+			break;
+		}
+		case 2:	
+		{
+			position_target_z = 40;
+			if(Camera.camera_goods == 2)
+			{
+				control_to_move(_P_goods_1_X, _P_goods_1_Y);
+			}
+			else if(Camera.camera_goods == 1)
+			{
+				control_to_move(_P_goods_2_X, _P_goods_2_Y);
+			}
+			break;
+		}
 	}
 
-	if(_time_ok(task_1) && work_flag)
+	if(_time_ok(task_1) && work_flag == 2)
 	{
 		task_1.finish = 1;
 		takeoff_once = 0;
-		ANO_DT_SendString(2,"goods OK!");
+		ANO_DT_SendString(2,"move goods OK!");
 		return;
 	}
 }
 
-void mission_1_6(void)							//移动 + 扫描随机路径
+void mission_1_6(void)							//危险任务投放工作
+{
+	if(takeoff_once == 0)
+	{
+		position_target_z = 40;	//40高度投放
+		takeoff_once = 1;
+		work_flag = 0;
+	}
+
+	mode_Hold_Yaw(Yaw_target);				
+	Set_High(position_target_z);
+
+	switch(work_flag)
+	{
+		case 0:	//悬停投放
+		{
+			if(task_1.mission_times > 1.5f)
+			{
+				Release_fun();
+				work_flag = 1;
+			}
+			break;
+		}
+		case 1:	//升高度
+		{
+			position_target_z = Default_height;
+
+			if(Radar.Location_Z > Default_height - 5)
+			{
+				work_flag = 2;
+			}
+			break;
+		}
+		case 2:
+		{
+			position_target_z = Default_height;
+
+			break;
+		}
+	}
+
+	if(_time_ok(task_1) && work_flag == 2)
+	{
+		task_1.finish = 1;
+		takeoff_once = 0;
+		ANO_DT_SendString(2,"relesse OK!");
+		return;
+	}
+}
+
+void mission_1_7(void)							//移动 + 扫描随机路径
 {
 	if(takeoff_once == 0)
 	{
@@ -376,7 +471,7 @@ void mission_1_6(void)							//移动 + 扫描随机路径
 	}
 }
 
-void mission_1_7(void)								//移动过障碍2
+void mission_1_8(void)								//移动过障碍2
 {
 	if(takeoff_once == 0)
 	{
@@ -445,7 +540,7 @@ void mission_1_7(void)								//移动过障碍2
 	}
 }
 
-void mission_1_8(void)//移动人员起点
+void mission_1_9(void)//移动人员起点
 {
 	if(takeoff_once == 0)
 	{
@@ -472,7 +567,7 @@ void mission_1_8(void)//移动人员起点
 	}
 }
 
-void mission_1_9(void)//移动人员工作
+void mission_1_10(void)//移动人员工作
 {
 	if(takeoff_once == 0)
 	{
@@ -499,7 +594,7 @@ void mission_1_9(void)//移动人员工作
 	}
 }
 
-void mission_1_10(void)							//返回障碍2
+void mission_1_11(void)							//返回障碍2
 {
 	if(takeoff_once == 0)
 	{
@@ -571,7 +666,7 @@ void mission_1_10(void)							//返回障碍2
 	}
 }
 
-void mission_1_11(void)							//返回障碍1
+void mission_1_12(void)							//返回障碍1
 {
 	if(takeoff_once == 0)
 	{
@@ -644,7 +739,7 @@ void mission_1_11(void)							//返回障碍1
 }
 
 
-void mission_1_12(void)							//移动回家
+void mission_1_13(void)							//移动回家
 {
 	if(takeoff_once == 0)
 	{
@@ -672,11 +767,11 @@ void mission_1_12(void)							//移动回家
 	}
 }
 
-void mission_1_13(void)//降落
+void mission_1_14(void)//降落
 {
 	if(takeoff_once == 0)//
 	{
-		position_target_z = 0;
+		position_target_z = -10;
 		begin_land = 1;		
 		takeoff_once = 1;
 		Move_stop();

@@ -150,7 +150,7 @@ void KEY_updata(void)
 
 		// HMI_position_updata(7);
 				// TIM3->CCR4 = 1100;
-
+		Loading_goods();
 		
 		key_value.Key1_Press = 0;
 		MY_HMI.HMI_key[1] = 0;
@@ -161,7 +161,7 @@ void KEY_updata(void)
 
 		// HMI_position_updata(7);
 				// TIM3->CCR4 = 700;
-
+		Relseae_goods_1();
 		
 		key_value.Key2_Press = 0;
 		MY_HMI.HMI_key[2] = 0;
@@ -171,15 +171,13 @@ void KEY_updata(void)
 		// MY_Flash_read();//¶Á
 
 		// HMI_position_updata(7);
-		TIM3->CCR3 = 1100;
+		Relseae_goods_2();
 
 		key_value.Key3_Press = 0;
 		MY_HMI.HMI_key[3] = 0;
 	}
 	if(key_value.Key4_Press == 1)
 	{		
-
-		TIM3->CCR3 = 700;
 
 
 		key_value.Key4_Press = 0;
