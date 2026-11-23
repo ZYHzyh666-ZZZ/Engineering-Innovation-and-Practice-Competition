@@ -83,7 +83,7 @@ void Tiva_Data(void) //处理接收的数据
 
 					break;
 				}
-				case 0x0F:                  //起飞指令
+				case 0x0F:                  //任务1起飞指令
 				{
 					// if(camera_data[1] == 0x01)
 						if(onekey_flag == 0)
@@ -92,10 +92,30 @@ void Tiva_Data(void) //处理接收的数据
 
 							if(rc_in.rc_ch.st_data.ch_[ch_7_aux3] > 1700 && rc_in.rc_ch.st_data.ch_[ch_5_aux1] < 1700 && rc_in.rc_ch.st_data.ch_[ch_5_aux1] > 1200)
 							{
-								ANO_DT_SendString(2,"Start!");
-							    start_task1_flag = 1;
-							    FC_Unlock();
-							    onekey_flag = 1;							
+								ANO_DT_SendString(2,"Task1 Start!");
+								start_task1_flag = 1;
+								FC_Unlock();
+								onekey_flag = 1;							
+							}
+							// ANO_DT_SendString(2,"Start!");
+
+						}
+					
+					break;
+				}
+				case 0x0E:                  //任务2起飞指令
+				{
+					// if(camera_data[1] == 0x01)
+						if(onekey_flag == 0)
+						{
+							// if(rc_in.rc_ch.st_data.ch_[ch_7_aux3] > 1700 && rc_in.rc_ch.st_data.ch_[ch_5_aux1] < 1700)
+
+							if(rc_in.rc_ch.st_data.ch_[ch_7_aux3] > 1700 && rc_in.rc_ch.st_data.ch_[ch_5_aux1] < 1700 && rc_in.rc_ch.st_data.ch_[ch_5_aux1] > 1200)
+							{
+								ANO_DT_SendString(2,"Task2 Start!");
+								start_task2_flag = 1;
+								FC_Unlock();
+								onekey_flag = 1;							
 							}
 							// ANO_DT_SendString(2,"Start!");
 

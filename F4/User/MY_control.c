@@ -23,8 +23,8 @@ My_mission_task task_mission_1[]=
 	{mission_1_9,2.0f},			//移动人员工作
 	{mission_1_10,2.0f},		//返回障碍2
 	{mission_1_11,2.0f},		//返回障碍1
-	{mission_1_12,2.0f},		//移动回家
-	{mission_1_13,2.0f},		//降落
+	{mission_1_12,2.0f},		//返回障碍点1前
+	{mission_1_13,2.0f},		//移动回家
 	{mission_1_14,2.0f},		//降落
 };
 My_task_state task_1;
@@ -44,8 +44,9 @@ My_mission_task task_mission_2[]=
 	{mission_2_9,2.0f},			//移动人员工作
 	{mission_2_10,2.0f},		//返回障碍2
 	{mission_2_11,2.0f},		//返回障碍1
-	{mission_2_12,2.0f},		//移动回家
-	{mission_2_13,2.0f},		//降落
+	{mission_2_12,2.0f},		//返回障碍点1前 
+	{mission_2_13,2.0f},		//移动回家
+	{mission_2_14,2.0f},		//降落
 };
 My_task_state task_2;
 u8 start_task2_flag = 0;		//任务开始标志
@@ -181,7 +182,7 @@ void mission_1_1(void)         //起飞
 		task_1.finish = 1;
 		takeoff_once = 0;
 //		MY_Camera_print("OK");
-		ANO_DT_SendString(2,"140 OK!");
+		ANO_DT_SendString(2,"FLAY OK!");
 		Move_stop();
 		return;
 	}
@@ -219,7 +220,7 @@ void mission_1_2(void)				//移动 + 扫描随机路径
 	}
 }
 
-void mission_1_3(void)						//移动过障碍1
+void mission_1_3(void)			//移动过障碍1			//移动过障碍1
 {
 	if(takeoff_once == 0)
 	{
@@ -288,7 +289,7 @@ void mission_1_3(void)						//移动过障碍1
 	}
 }
 
-void mission_1_4(void)						//移动危险任务区
+void mission_1_4(void)			//移动危险任务区			//移动危险任务区
 {
 	if(takeoff_once == 0)
 	{
@@ -315,7 +316,7 @@ void mission_1_4(void)						//移动危险任务区
 	}
 }
 
-void mission_1_5(void)							//移动危险任务工作
+void mission_1_5(void)					//移动危险任务工作		//移动危险任务工作
 {
 	if(takeoff_once == 0)
 	{
@@ -348,24 +349,24 @@ void mission_1_5(void)							//移动危险任务工作
 		}
 		case 1:	//降高度
 		{
-			position_target_z = 40;
+			position_target_z = 70;
 			if(Camera.camera_goods == 1)
 			{
 				control_to_move(_P_goods_1_X, _P_goods_1_Y);
-				if(Judgment_Position(_P_goods_1_X, _P_goods_1_Y) && Radar.Location_Z < 43)
+				if(Judgment_Position(_P_goods_1_X, _P_goods_1_Y) && Radar.Location_Z < 75)
 					work_flag = 2;
 			}
 			else if(Camera.camera_goods == 2)
 			{
 				control_to_move(_P_goods_2_X, _P_goods_2_Y);
-				if(Judgment_Position(_P_goods_2_X, _P_goods_2_Y) && Radar.Location_Z < 43)
+				if(Judgment_Position(_P_goods_2_X, _P_goods_2_Y) && Radar.Location_Z < 75)
 					work_flag = 2;
 			}
 			break;
 		}
 		case 2:	
 		{
-			position_target_z = 40;
+			position_target_z = 70;
 			if(Camera.camera_goods == 2)
 			{
 				control_to_move(_P_goods_1_X, _P_goods_1_Y);
@@ -387,11 +388,11 @@ void mission_1_5(void)							//移动危险任务工作
 	}
 }
 
-void mission_1_6(void)							//危险任务投放工作
+void mission_1_6(void)			//移动 + 扫描随机路径				//危险任务投放工作
 {
 	if(takeoff_once == 0)
 	{
-		position_target_z = 40;	//40高度投放
+		position_target_z = 70;	//40高度投放
 		takeoff_once = 1;
 		work_flag = 0;
 	}
@@ -405,7 +406,10 @@ void mission_1_6(void)							//危险任务投放工作
 		{
 			if(task_1.mission_times > 1.5f)
 			{
-				Release_fun();
+				Relseae_goods_1();
+			}
+			if(task_1.mission_times > 4.0f)
+			{
 				work_flag = 1;
 			}
 			break;
@@ -437,7 +441,7 @@ void mission_1_6(void)							//危险任务投放工作
 	}
 }
 
-void mission_1_7(void)							//移动 + 扫描随机路径
+void mission_1_7(void)		//移动过障碍1					//移动 + 扫描随机路径
 {
 	if(takeoff_once == 0)
 	{
@@ -457,7 +461,6 @@ void mission_1_7(void)							//移动 + 扫描随机路径
 	if(_time_ok(task_1) && work_flag)								
 	{
 		// Move_stop();
-
 		task_1.finish = 1;
 		takeoff_once = 0;
 		ANO_DT_SendString(2,"scan OK!");
@@ -471,7 +474,7 @@ void mission_1_7(void)							//移动 + 扫描随机路径
 	}
 }
 
-void mission_1_8(void)								//移动过障碍2
+void mission_1_8(void)		//移动人员起点						//移动过障碍2
 {
 	if(takeoff_once == 0)
 	{
@@ -540,7 +543,7 @@ void mission_1_8(void)								//移动过障碍2
 	}
 }
 
-void mission_1_9(void)//移动人员起点
+void mission_1_9(void)	//移动人员工作
 {
 	if(takeoff_once == 0)
 	{
@@ -567,7 +570,7 @@ void mission_1_9(void)//移动人员起点
 	}
 }
 
-void mission_1_10(void)//移动人员工作
+void mission_1_10(void)//返回障碍2
 {
 	if(takeoff_once == 0)
 	{
@@ -594,7 +597,7 @@ void mission_1_10(void)//移动人员工作
 	}
 }
 
-void mission_1_11(void)							//返回障碍2
+void mission_1_11(void)			//返回障碍1				//返回障碍2
 {
 	if(takeoff_once == 0)
 	{
@@ -666,7 +669,7 @@ void mission_1_11(void)							//返回障碍2
 	}
 }
 
-void mission_1_12(void)							//返回障碍1
+void mission_1_12(void)			//返回障碍点1前				//返回障碍1
 {
 	if(takeoff_once == 0)
 	{
@@ -739,7 +742,7 @@ void mission_1_12(void)							//返回障碍1
 }
 
 
-void mission_1_13(void)							//移动回家
+void mission_1_13(void)			//移动回家
 {
 	if(takeoff_once == 0)
 	{
@@ -757,8 +760,6 @@ void mission_1_13(void)							//移动回家
 
 	if(_time_ok(task_1) && work_flag)								
 	{
-		// Move_stop();
-
 		task_1.finish = 1;
 		takeoff_once = 0;
 		ANO_DT_SendString(2,"home OK!");
@@ -809,7 +810,7 @@ void mission_2_1(void)//起飞
 	Set_High(position_target_z);
 	mode_Hold_Yaw(Yaw_target);				//保持航向角稳定
 
-	if(_time_ok(task_2) && Radar.Location_Z > Default_height - 2)//起飞到指定高度
+	if(_time_ok(task_2) && Radar.Location_Z > Default_height - 4)//起飞到指定高度
 	{
 		task_2.finish = 1;
 		takeoff_once = 0;
@@ -840,7 +841,6 @@ void mission_2_1(void)//起飞
 
 		task_2.finish = 1;
 		takeoff_once = 0;
-		ANO_DT_SendString(2,"3s OK!");
 		ANO_DT_SendString(2,"scan OK!");
 
 		if(Camera.camera_choose[0] == 2)
@@ -928,29 +928,25 @@ void mission_2_4(void)//移动危险任务区
 {
 	if(takeoff_once == 0)
 	{
-		if(work_2_flag == 2)
-		{
-			task_2.finish = 1;
-			return;
-		}
-		position_target_z = 100;
+		position_target_z = Default_height;
 		takeoff_once = 1;
+		work_2_flag = 0;
 	}
 
 	Set_High(position_target_z);
-	mode_Hold_Yaw(Yaw_target);				//保持航向角稳定
+	mode_Hold_Yaw(Yaw_target);				
+	control_to_move(_P_goods_1_X, _P_goods_1_Y);
 
-	control_to_follow();
-
-	if(_time_ok(task_2))
+	if(Judgment_Position(_P_goods_1_X, _P_goods_1_Y) && Camera.camera_goods)
 	{
-		Move_stop();
-		Release_fun();
+		work_2_flag = 1;
+	}
+
+	if(_time_ok(task_2) && work_2_flag)
+	{
 		task_2.finish = 1;
 		takeoff_once = 0;
-		ANO_DT_SendString(2,"release OK!");
-		// ANO_DT_Send_MY_DATA(0xF9,2,Camera.x,Camera.y);
-
+		ANO_DT_SendString(2,"goods OK!");
 		return;
 	}
 }      
@@ -961,225 +957,602 @@ void mission_2_5(void)//移动危险任务工作
 	{
 		position_target_z = Default_height;
 		takeoff_once = 1;
-		Move_stop();
+		work_2_flag = 2;
 	}
 
-	Set_High(position_target_z);
 	mode_Hold_Yaw(Yaw_target);				//保持航向角稳定
-	control_back();
+	Set_High(position_target_z);
 
-	if(abs(position_begin_x - Radar.Location_X) < 20 && abs(position_begin_y - Radar.Location_Y) < 20 && _time_ok(task_2))
+	switch(work_2_flag)
+	{
+		case 0:	//移动至目标点前
+		{
+			position_target_z = Default_height;
+			if(Camera.camera_goods == 1)
+			{
+				control_to_move(_P_goods_1_X, _P_goods_1_Y);
+				if(Judgment_Position(_P_goods_1_X, _P_goods_1_Y))
+					work_2_flag = 1;
+			}
+			else if(Camera.camera_goods == 2)
+			{
+				control_to_move(_P_goods_2_X, _P_goods_2_Y);
+				if(Judgment_Position(_P_goods_2_X, _P_goods_2_Y))
+					work_2_flag = 1;
+			}
+			break;
+		}
+		case 1:	//降高度
+		{
+			position_target_z = 70;
+			if(Camera.camera_goods == 1)
+			{
+				control_to_move(_P_goods_1_X, _P_goods_1_Y);
+				if(Judgment_Position(_P_goods_1_X, _P_goods_1_Y) && Radar.Location_Z < 75)
+					work_2_flag = 2;
+			}
+			else if(Camera.camera_goods == 2)
+			{
+				control_to_move(_P_goods_2_X, _P_goods_2_Y);
+				if(Judgment_Position(_P_goods_2_X, _P_goods_2_Y) && Radar.Location_Z < 75)
+					work_2_flag = 2;
+			}
+			break;
+		}
+		case 2:	
+		{
+			position_target_z = 70;
+			if(Camera.camera_goods == 2)
+			{
+				control_to_move(_P_goods_1_X, _P_goods_1_Y);
+			}
+			else if(Camera.camera_goods == 1)
+			{
+				control_to_move(_P_goods_2_X, _P_goods_2_Y);
+			}
+			break;
+		}
+	}
+
+	if(_time_ok(task_1) && work_flag == 2)
 	{
 		task_2.finish = 1;
 		takeoff_once = 0;
-		Move_stop();
-		ANO_DT_SendString(2,"back OK!");
+		ANO_DT_SendString(2,"move goods OK!");
 		return;
 	}
 }
 
-void mission_2_6(void)//移动 + 扫描随机路径
+void mission_2_6(void)//投放完成后升起
 {
-	if(takeoff_once == 0)//
+	if(takeoff_once == 0)
+	{
+		position_target_z = 70;	//40高度投放
+		takeoff_once = 1;
+		work_2_flag = 0;
+	}
+
+	mode_Hold_Yaw(Yaw_target);				
+	Set_High(position_target_z);
+
+	switch(work_2_flag)
+	{
+		case 0:	//悬停投放
+		{
+			if(task_1.mission_times > 1.5f)
+			{
+				Relseae_goods_1();
+			}
+			if(task_1.mission_times > 4.0f)
+			{
+				work_2_flag = 1;
+			}
+			break;
+		}
+		case 1:	//升高度
+		{
+			position_target_z = Default_height;
+
+			if(Radar.Location_Z > Default_height - 5)
+			{
+				work_2_flag = 2;
+			}
+			break;
+		}
+		case 2:
+		{
+			position_target_z = Default_height;
+
+			break;
+		}
+	}
+
+	if(work_2_flag == 2 && _time_ok(task_2))
+	{
+		task_2.finish = 1;
+		takeoff_once = 0;
+		ANO_DT_SendString(2,"relesse OK!");
+		return;
+	}
+}
+
+void mission_2_7(void)//移动 + 扫描随机路径
+{
+	if(takeoff_once == 0)
+	{
+		position_target_z = Default_height;
+		takeoff_once = 1;
+		work_2_flag = 0;
+	}
+
+	Set_High(position_target_z);
+	mode_Hold_Yaw(Yaw_target);			
+
+	control_to_move(_P2_Waiting_X, _P2_Waiting_Y);
+
+	if(Camera.camera_choose[1] && Judgment_Position(_P2_Waiting_X, _P2_Waiting_Y))
+		work_2_flag = 1;	
+
+	if(_time_ok(task_2) && work_2_flag)
+	{
+		task_2.finish = 1;
+		takeoff_once = 0;
+		ANO_DT_SendString(2,"3s OK!");
+
+		if(Camera.camera_choose[1] == 2)
+			ANO_DT_SendString(1,"scan -- 1!");
+		else
+			ANO_DT_SendString(1,"scan -- 2!");
+		return;
+	}
+}
+
+void mission_2_8(void)//移动过障碍1
+{
+	if(takeoff_once == 0)
+	{
+		position_target_z = Default_height;
+		takeoff_once = 1;
+		work_2_flag = 0;
+	}
+	Set_High(position_target_z);
+	mode_Hold_Yaw(Yaw_target);			
+
+	switch(work_2_flag)
+	{
+		case 0:	//移动至路径前
+		{
+			if(Camera.camera_choose[1] == 2)
+			{
+				control_to_move(_P2_choose_1_X, _P2_choose_1_Y);
+				if(Judgment_Position(_P2_choose_1_X, _P2_choose_1_Y))
+					work_2_flag = 1;
+			}
+			else if(Camera.camera_choose[1] == 1)
+			{
+				control_to_move(_P2_choose_2_X, _P2_choose_2_Y);
+				if(Judgment_Position(_P2_choose_2_X, _P2_choose_2_Y))
+					work_2_flag = 1;
+			}
+			break;
+		}
+		case 1:	//移动通过障碍2
+		{
+			if(Camera.camera_choose[1] == 2)
+			{
+				control_to_move(_P2_choose_1_X, _P2_move_Y);
+				if(Judgment_Position(_P2_choose_1_X, _P2_move_Y))
+					work_2_flag = 2;
+			}
+			else if(Camera.camera_choose[1] == 1)
+			{
+				control_to_move(_P2_choose_2_X, _P2_move_Y);
+				if(Judgment_Position(_P2_choose_2_X, _P2_move_Y))
+					work_2_flag = 2;
+			}
+			break;
+		}
+		case 2:	//移动通过障碍2
+		{
+			if(Camera.camera_choose[1] == 2)
+			{
+				control_to_move(_P2_choose_1_X, _P2_move_Y);
+			}
+			else if(Camera.camera_choose[1] == 1)
+			{
+				control_to_move(_P2_choose_2_X, _P2_move_Y);
+			}
+			break;
+		}
+	}
+
+	if(_time_ok(task_2) && work_2_flag == 2)
+	{
+		task_2.finish = 1;
+		takeoff_once = 0;
+		ANO_DT_SendString(2,"move OK!");
+		return;
+	}
+}
+
+void mission_2_9(void)//移动人员起点
+{
+	if(takeoff_once == 0)
+	{
+		position_target_z = Default_height;
+		takeoff_once = 1;
+		work_2_flag = 0;
+	}
+	Set_High(position_target_z);
+	mode_Hold_Yaw(Yaw_target);			
+	control_to_move(_P_person_1_X, _P_person_1_Y);
+
+	if(Judgment_Position(_P_person_1_X, _P_person_1_Y))
+	{
+		work_2_flag = 1;
+	}
+
+	if(_time_ok(task_2) && work_2_flag)
+	{
+		task_2.finish = 1;
+		takeoff_once = 0;
+		ANO_DT_SendString(2,"person1 OK!");
+		return;
+	}
+}
+
+void mission_2_10(void)//移动人员工作
+{
+	if(takeoff_once == 0)
+	{
+		position_target_z = Default_height;
+		takeoff_once = 1;
+		work_2_flag = 0;
+	}
+	Set_High(position_target_z);
+	mode_Hold_Yaw(Yaw_target);			
+	control_to_move(_P_person_3_X, _P_person_3_Y);
+
+	if(Judgment_Position(_P_person_3_X, _P_person_3_Y) && Camera.camera_person)
+	{
+		work_2_flag = 1;
+	}
+
+	if(_time_ok(task_2) && work_2_flag)
+	{
+		task_2.finish = 1;
+		takeoff_once = 0;
+		ANO_DT_SendString(2,"scan person OK!");
+		return;
+	}
+}
+
+void mission_2_11(void)					//移动危险任务工作		//移动危险任务工作
+{
+	if(takeoff_once == 0)
+	{
+		position_target_z = Default_height;
+		takeoff_once = 1;
+		work_2_flag = 0;
+	}
+
+	mode_Hold_Yaw(Yaw_target);		
+	Set_High(position_target_z);
+
+	switch(work_2_flag)
+	{
+		case 0:	//移动至目标点前
+		{
+			position_target_z = Default_height;
+			if(Camera.camera_person == 1)
+			{
+				control_to_move(_P_person_1_X, _P_person_1_Y);
+				if(Judgment_Position(_P_person_1_X, _P_person_1_Y))
+					work_2_flag = 1;
+			}
+			else if(Camera.camera_person == 2)
+			{
+				control_to_move(_P_person_2_X, _P_person_2_Y);
+				if(Judgment_Position(_P_person_2_X, _P_person_2_Y))
+					work_2_flag = 1;
+			}
+			else if(Camera.camera_person == 3)
+			{
+				control_to_move(_P_person_3_X, _P_person_3_Y);
+				if(Judgment_Position(_P_person_3_X, _P_person_3_Y))
+					work_2_flag = 1;
+			}
+			break;
+		}
+		case 1:	//降高度
+		{
+			position_target_z = 70;
+			if(Camera.camera_person == 1)
+			{
+				control_to_move(_P_person_1_X, _P_person_1_Y);
+				if(Judgment_Position(_P_person_1_X, _P_person_1_Y) && Radar.Location_Z < 75)
+					work_2_flag = 2;
+			}
+			else if(Camera.camera_person == 2)
+			{
+				control_to_move(_P_person_2_X, _P_person_2_Y);
+				if(Judgment_Position(_P_person_2_X, _P_person_2_Y) && Radar.Location_Z < 75)
+					work_2_flag = 2;
+			}
+			else if(Camera.camera_person == 3)
+			{
+				control_to_move(_P_person_3_X, _P_person_3_Y);
+				if(Judgment_Position(_P_person_3_X, _P_person_3_Y) && Radar.Location_Z < 75)
+					work_2_flag = 2;
+			}
+			break;
+		}
+		case 2:	
+		{
+			position_target_z = 70;
+			if(Camera.camera_person == 2)
+			{
+				control_to_move(_P_person_1_X, _P_person_1_Y);
+			}
+			else if(Camera.camera_person == 1)
+			{
+				control_to_move(_P_person_2_X, _P_person_2_Y);
+			}
+			else if(Camera.camera_person == 3)
+			{
+				control_to_move(_P_person_3_X, _P_person_3_Y);
+			}
+			break;
+		}
+	}
+
+	if(_time_ok(task_2) && work_2_flag == 2)
+	{
+		task_2.finish = 1;
+		takeoff_once = 0;
+		ANO_DT_SendString(2,"move person OK!");
+		return;
+	}
+}
+
+void mission_2_12(void)			//移动 + 扫描随机路径				//危险任务投放工作
+{
+	if(takeoff_once == 0)
+	{
+		position_target_z = 70;	//40高度投放
+		takeoff_once = 1;
+		work_2_flag = 0;
+	}
+
+	mode_Hold_Yaw(Yaw_target);				
+	Set_High(position_target_z);
+
+	switch(work_flag)
+	{
+		case 0:	//悬停投放
+		{
+			if(task_2.mission_times > 1.5f)
+			{
+				Relseae_goods_2();
+			}
+			if(task_2.mission_times > 4.0f)
+			{
+				work_2_flag = 1;
+			}
+			break;
+		}
+		case 1:	//升高度
+		{
+			position_target_z = Default_height;
+
+			if(Radar.Location_Z > Default_height - 5)
+			{
+				work_2_flag = 2;
+			}
+			break;
+		}
+		case 2:
+		{
+			position_target_z = Default_height;
+
+			break;
+		}
+	}
+
+	if(_time_ok(task_2) && work_2_flag == 2)
+	{
+		task_2.finish = 1;
+		takeoff_once = 0;
+		ANO_DT_SendString(2,"relesse OK!");
+		return;
+	}
+}
+
+void mission_2_13(void)//返回障碍1
+{
+	if(takeoff_once == 0)
+	{
+		position_target_z = Default_height;
+		takeoff_once = 1;
+		work_2_flag = 0;
+	}
+	Set_High(position_target_z);
+	mode_Hold_Yaw(Yaw_target);			
+
+	switch(work_2_flag)
+	{
+		case 0:	//移动至路径后
+		{
+			if(Camera.camera_choose[1] == 2)
+			{
+				control_to_move(_P2_choose_1_X, _P2_move_Y);
+				if(Judgment_Position(_P2_choose_1_X, _P2_move_Y))
+					work_2_flag = 1;
+			}
+			else if(Camera.camera_choose[1] == 1)
+			{
+				control_to_move(_P2_choose_2_X, _P2_move_Y);
+				if(Judgment_Position(_P2_choose_2_X, _P2_move_Y))
+					work_2_flag = 1;
+			}
+			break;
+		}
+		case 1:	//移动通过障碍2
+		{
+			if(Camera.camera_choose[1] == 2)
+			{
+				control_to_move(_P2_choose_1_X, _P2_back_Y);
+				if(Judgment_Position(_P2_choose_1_X, _P2_back_Y))
+					work_2_flag = 2;
+			}
+			else if(Camera.camera_choose[1] == 1)
+			{
+				control_to_move(_P2_choose_2_X, _P2_back_Y);
+				if(Judgment_Position(_P2_choose_2_X, _P2_back_Y))
+					work_2_flag = 2;
+			}
+			break;
+		}
+		case 2:	//移动通过障碍2
+		{
+			if(Camera.camera_choose[1] == 2)
+			{
+				control_to_move(_P2_choose_1_X, _P2_back_Y);
+			}
+			else if(Camera.camera_choose[1] == 1)
+			{
+				control_to_move(_P2_choose_2_X, _P2_back_Y);
+			}
+			break;
+		}
+	}
+
+	if(_time_ok(task_2) && work_2_flag == 2)
+	{
+		Move_stop();
+
+		task_2.finish = 1;
+		takeoff_once = 0;
+		ANO_DT_SendString(2,"back_2 OK!");
+
+		return;
+	}
+}
+
+void mission_2_14(void)//返回障碍点1前 
+{
+	if(takeoff_once == 0)
+	{
+		position_target_z = Default_height;
+		takeoff_once = 1;
+		work_2_flag = 0;
+	}
+	Set_High(position_target_z);
+	mode_Hold_Yaw(Yaw_target);		
+	
+	switch(work_2_flag)
+	{
+		case 0:	//移动至路径后
+		{
+			if(Camera.camera_choose[0] == 2)
+			{
+				control_to_move(_P1_choose_1_X, _P1_move_Y);
+				if(Judgment_Position(_P1_choose_1_X, _P1_move_Y))
+					work_2_flag = 1;
+			}
+			else if(Camera.camera_choose[0] == 1)
+			{
+				control_to_move(_P1_choose_2_X, _P1_move_Y);
+				if(Judgment_Position(_P1_choose_2_X, _P1_move_Y))
+					work_2_flag = 1;
+			}
+			break;
+		}
+		case 1:	//移动通过障碍2
+		{
+			if(Camera.camera_choose[0] == 2)
+			{
+				control_to_move(_P1_choose_1_X, _P1_back_Y);
+				if(Judgment_Position(_P1_choose_1_X, _P1_back_Y))
+					work_2_flag = 2;
+			}
+			else if(Camera.camera_choose[0] == 1)
+			{
+				control_to_move(_P1_choose_2_X, _P1_back_Y);
+				if(Judgment_Position(_P1_choose_2_X, _P1_back_Y))
+					work_2_flag = 2;
+			}
+			break;
+		}
+		case 2:	//移动通过障碍2
+		{
+			if(Camera.camera_choose[0] == 2)
+			{
+				control_to_move(_P1_choose_1_X, _P1_back_Y);
+			}
+			else if(Camera.camera_choose[0] == 1)
+			{
+				control_to_move(_P1_choose_2_X, _P1_back_Y);
+			}
+			break;
+		}		
+	}
+
+	if(_time_ok(task_2) && work_2_flag == 2)
+	{
+		task_2.finish = 1;
+		takeoff_once = 0;
+		ANO_DT_SendString(2,"back_1 OK!");
+
+		return;
+	}
+}
+
+void mission_2_15(void)		//移动回家
+{
+	if(takeoff_once == 0)
+	{
+		position_target_z = Default_height;
+		takeoff_once = 1;
+		work_2_flag = 0;
+	}
+	Set_High(position_target_z);
+	mode_Hold_Yaw(Yaw_target);		
+
+	control_to_move(_HOME_X, _HOME_Y);
+
+	if(Judgment_Position(position_begin_x, position_begin_y))
+		work_2_flag = 1;								//判断是否扫描到路径 && 到达等待位置
+
+	if(_time_ok(task_2) && work_2_flag)
+	{
+		task_2.finish = 1;
+		takeoff_once = 0;
+		ANO_DT_SendString(2,"home OK!");
+
+		return;
+	}
+}
+
+void mission_2_16(void)			//降落
+{
+	if(takeoff_once == 0)
 	{
 		position_target_z = -10;
-		begin_land = 1;		
 		takeoff_once = 1;
+		begin_land = 1;		
 		Move_stop();
 	}
 
 	Set_High(position_target_z);
-	Program_Ctrl_User_Set_HXYcmps(0,0);
+	mode_Hold_Yaw(Yaw_target);			
+
 	if(ano_of.of_alt_cm < 10 && _time_ok(task_2))
 	{
 		task_2.finish = 1;
 		takeoff_once = 0;
 		FC_Lock();
 		ANO_DT_SendString(2,"land OK!");
-		return;
-	}
-}
-
-void mission_2_7(void)//移动过障碍1
- {
- 	if(takeoff_once == 0)
- 	{
- 		position_target_z = Default_height;
- 		takeoff_once = 1;
- 	}
- 	Set_High(position_target_z);
- 	mode_Hold_Yaw(Yaw_target);			
- 	Move_stop();
-
- 	if(_time_ok(task_2))
- 	{
- 		Move_stop();
-
- 		task_2.finish = 1;
- 		takeoff_once = 0;
- 		ANO_DT_SendString(2,"3s OK!");
-
- 		return;
- 	}
- }
-
-void mission_2_8(void)//移动人员起点
- {
- 	if(takeoff_once == 0)
- 	{
- 		position_target_z = Default_height;
- 		takeoff_once = 1;
- 	}
- 	Set_High(position_target_z);
- 	mode_Hold_Yaw(Yaw_target);			
- 	Move_stop();
-
- 	if(_time_ok(task_2))
- 	{
- 		Move_stop();
-
- 		task_2.finish = 1;
- 		takeoff_once = 0;
- 		ANO_DT_SendString(2,"3s OK!");
-
- 		return;
- 	}
- }
-
-void mission_2_9(void)//移动人员工作
- {
- 	if(takeoff_once == 0)
- 	{
- 		position_target_z = Default_height;
- 		takeoff_once = 1;
- 	}
- 	Set_High(position_target_z);
- 	mode_Hold_Yaw(Yaw_target);			
- 	Move_stop();
-
- 	if(_time_ok(task_2))
- 	{
- 		Move_stop();
-
- 		task_2.finish = 1;
- 		takeoff_once = 0;
- 		ANO_DT_SendString(2,"3s OK!");
-
- 		return;
- 	}
- }
-
-void mission_2_10(void)//返回障碍2
- {
- 	if(takeoff_once == 0)
- 	{
- 		position_target_z = Default_height;
- 		takeoff_once = 1;
- 	}
- 	Set_High(position_target_z);
- 	mode_Hold_Yaw(Yaw_target);			
- 	Move_stop();
-
- 	if(_time_ok(task_2))
- 	{
- 		Move_stop();
-
- 		task_2.finish = 1;
- 		takeoff_once = 0;
- 		ANO_DT_SendString(2,"3s OK!");
-
- 		return;
- 	}
- }
-
-void mission_2_11(void)//返回障碍1
- {
- 	if(takeoff_once == 0)
- 	{
- 		position_target_z = Default_height;
- 		takeoff_once = 1;
- 	}
- 	Set_High(position_target_z);
- 	mode_Hold_Yaw(Yaw_target);			
- 	Move_stop();
-
- 	if(_time_ok(task_2))
- 	{
- 		Move_stop();
-
- 		task_2.finish = 1;
- 		takeoff_once = 0;
- 		ANO_DT_SendString(2,"3s OK!");
-
- 		return;
- 	}
- }
-
-void mission_2_12(void)//移动回家
- {
- 	if(takeoff_once == 0)
- 	{
- 		position_target_z = Default_height;
- 		takeoff_once = 1;
- 	}
- 	Set_High(position_target_z);
- 	mode_Hold_Yaw(Yaw_target);			
- 	Move_stop();
-
- 	if(_time_ok(task_2))
- 	{
- 		Move_stop();
-
- 		task_2.finish = 1;
- 		takeoff_once = 0;
- 		ANO_DT_SendString(2,"3s OK!");
-
- 		return;
- 	}
- }
-
-  void mission_2_13(void)//降落
- {
- 	if(takeoff_once == 0)
- 	{
- 		position_target_z = Default_height;
- 		takeoff_once = 1;
- 	}
- 	Set_High(position_target_z);
- 	mode_Hold_Yaw(Yaw_target);			
- 	Move_stop();
-
- 	if(_time_ok(task_2))
- 	{
- 		Move_stop();
-
- 		task_2.finish = 1;
- 		takeoff_once = 0;
- 		ANO_DT_SendString(2,"3s OK!");
-
- 		return;
- 	}
- }
-
-void mission_2_14(void)				//悬停
-{
-	if(takeoff_once == 0)
-	{
-		position_target_z = Default_height;
-		takeoff_once = 1;
-	}
-	Set_High(position_target_z);
-	mode_Hold_Yaw(Yaw_target);			
-	Move_stop();
-
-	if(_time_ok(task_2))
-	{
-		Move_stop();
-
-		task_2.finish = 1;
-		takeoff_once = 0;
-		ANO_DT_SendString(2,"3s OK!");
-
 		return;
 	}
 }

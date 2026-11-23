@@ -65,6 +65,7 @@ void mission_2_10(void);
 void mission_2_11(void);
 void mission_2_12(void);
 void mission_2_13(void);
+void mission_2_14(void);
 
 #define Default_height 110			//默认高度cm
 
